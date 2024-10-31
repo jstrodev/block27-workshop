@@ -1,44 +1,49 @@
 import { useState } from "react";
 
-const SignUpForm = () => {
+export default function SignUpForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
 
-  // Handle submit inside the component
   async function handleSubmit(event) {
     event.preventDefault();
+
     try {
-      /* empty */
+      // Addingform submission logic here
+      console.log("Form submitted with:", { username, password });
     } catch (error) {
       setError(error.message);
     }
   }
 
   return (
-    <div>
-      <h2>Sign Up</h2>
-      {error && <p>{error}</p>}
+    <>
+            <h2>Sign Up</h2>
+            {error && <p>{error}</p>}
+            
       <form onSubmit={handleSubmit}>
+                
         <label>
-          Username:{" "}
+                    Username:           
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />
+                  
         </label>
+                
         <label>
-          Password:
+                    Password:           
           <input
             type="password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
         </label>
-        <button>Submit</button>
+                <button>Submit</button>
+              
       </form>
-    </div>
+          
+    </>
   );
-};
-
-export default SignUpForm;
+}
