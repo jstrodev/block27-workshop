@@ -1,5 +1,6 @@
 import { useState } from "react";
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import axios from "axios";
 
 export default function Authenticate({ token }) {
   const [successMessage, setSuccessMessage] = useState(null);
@@ -7,20 +8,20 @@ export default function Authenticate({ token }) {
 
   async function handleClick() {
     try {
-      const response = await fetch(
+      const response = await axios.get(
         "https://fsa-jwt-practice.herokuapp.com/authenticate",
         {
-          method: "GET",
           headers: {
             "Content-Type": "application/json",
-          "Authorization": `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
+      );
 
-      const result = await response.json();
+      const result = response.data;
       setSuccessMessage(result.message);
     } catch (error) {
-      setError(error.message);
+      setError(error.response?.data?.message || error.message);
     }
   }
 
@@ -34,5 +35,5 @@ export default function Authenticate({ token }) {
 }
 
 Authenticate.propTypes = {
-  token: PropTypes.string,  
+  token: PropTypes.string.isRequired,
 };

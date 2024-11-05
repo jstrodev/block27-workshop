@@ -1,5 +1,6 @@
 import { useState } from "react";
-import PropTypes from "prop-types"; // Import PropTypes
+import PropTypes from "prop-types";
+import axios from "axios";
 
 export default function SignUpForm({ setToken }) {
   const [username, setUsername] = useState("");
@@ -11,20 +12,21 @@ export default function SignUpForm({ setToken }) {
     console.log("handleSubmit triggered");
 
     try {
-      const response = await fetch("https://fsa-jwt-practice.herokuapp.com/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
+      const response = await axios.post(
+        "https://fsa-jwt-practice.herokuapp.com/signup",
+        { username, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
 
-      const result = await response.json();
+      const result = response.data;
       if (result.token) {
-        setToken(result.token);  
+        setToken(result.token);
       } else {
         setError("Failed to retrieve token.");
       }
     } catch (error) {
-      setError(error.message);
+      // Handle errors from Axios
+      setError(error.response?.data?.message || error.message);
     }
   }
 
@@ -35,7 +37,10 @@ export default function SignUpForm({ setToken }) {
       <form onSubmit={handleSubmit}>
         <label>
           Username:
-          <input value={username} onChange={(e) => setUsername(e.target.value)} />
+          <input
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
         </label>
         <label>
           Password:
@@ -51,7 +56,6 @@ export default function SignUpForm({ setToken }) {
   );
 }
 
-// Define prop types for validation
 SignUpForm.propTypes = {
   setToken: PropTypes.func.isRequired,
 };
