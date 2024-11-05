@@ -34,5 +34,5 @@ export default function Authenticate({ token }) {
 }
 
 Authenticate.propTypes = {
-  token: PropTypes.string.isRequired,
+  token: PropTypes.string,  
 };
